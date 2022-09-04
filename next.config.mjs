@@ -1,4 +1,5 @@
 import { env } from "./src/env/server.mjs";
+import withTmInitializer from "next-transpile-modules";
 
 /**
  * Don't be scared of the generics here.
@@ -12,7 +13,11 @@ function defineNextConfig(config) {
   return config;
 }
 
-export default defineNextConfig({
-  reactStrictMode: true,
-  swcMinify: true,
-});
+const withTM = withTmInitializer(["react-hexgrid"]);
+
+export default defineNextConfig(
+  withTM({
+    reactStrictMode: true,
+    swcMinify: true,
+  })
+);
