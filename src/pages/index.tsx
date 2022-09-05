@@ -11,7 +11,7 @@ const Home: NextPage = () => {
       <Head>
         <title>My Skill Tree</title>
       </Head>
-      <main>
+      <main className="w-screen h-screen">
         <Tree />
       </main>
     </>
