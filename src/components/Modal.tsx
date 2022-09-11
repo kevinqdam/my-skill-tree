@@ -1,8 +1,8 @@
 import { Dispatch, Fragment, SetStateAction, useRef } from "react";
 import { HexagonKey, HEXAGON_COLORS, Skill } from "./Tree";
 import { Dialog, Transition } from "@headlessui/react";
-import SkillForm from './SkillForm';
-import ColoredCircle from './ColoredCircle';
+import ColorListbox from "@/components/ColorListbox";
+import ColoredCircle from "@/components/ColoredCircle";
 
 type ModalProps = {
   showModal: boolean;
@@ -10,18 +10,14 @@ type ModalProps = {
   hexagonKey?: HexagonKey;
 };
 
-const Modal = ({
-  showModal,
-  setShowModal,
-  hexagonKey,
-}: ModalProps) => {
+const Modal = ({ showModal, setShowModal, hexagonKey }: ModalProps) => {
   const cancelButtonRef = useRef(null);
 
   return (
     <Transition.Root show={showModal} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10"
+        className="relative"
         initialFocus={cancelButtonRef}
         onClose={setShowModal}
       >
@@ -48,22 +44,21 @@ const Modal = ({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <Dialog.Panel className="transform overflow-visible border-4 border-white rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
-                    <ColoredCircle color={HEXAGON_COLORS.Slate}></ColoredCircle>
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                       <Dialog.Title
-                        as="h3"
-                        className="text-lg font-medium leading-6 text-gray-900"
+                        as="div"
+                        className="flex justify-between text-lg font-medium leading-6 text-gray-900"
                       >
                         Modal title
+                        <ColorListbox color={HEXAGON_COLORS.Slate} />
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
                           {`You clicked the hexagon with key: ${hexagonKey}!`}
                         </p>
-                        <SkillForm />
                       </div>
                     </div>
                   </div>
