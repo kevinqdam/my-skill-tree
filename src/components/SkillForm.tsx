@@ -1,4 +1,4 @@
-import { Menu } from "@headlessui/react";
+import { Listbox } from "@headlessui/react";
 import { useState } from "react";
 import ColoredCircle from "./ColoredCircle";
 import { HexagonColor, HEXAGON_COLORS } from "./Tree";
@@ -9,20 +9,20 @@ const SkillForm = () => {
   );
 
   return (
-    <Menu as="div">
-      <Menu.Button>
-        <ColoredCircle></ColoredCircle>
-      </Menu.Button>
-      <Menu.Items>
+    <Listbox value={selectedColor} onChange={setSelectedColor}>
+      <Listbox.Button>{<ColoredCircle color={selectedColor} />}</Listbox.Button>
+      <Listbox.Options>
         {Object.values(HEXAGON_COLORS)
           .filter((color) => color.display !== "Slate")
           .map((color) => (
-            <Menu.Item as="div" key={color.display}>
-              <ColoredCircle color={color}></ColoredCircle>
-            </Menu.Item>
+            <Listbox.Option key={color.display} value={color}>
+              <ColoredCircle color={color} />
+              {" "}
+              {color.display}
+            </Listbox.Option>
           ))}
-      </Menu.Items>
-    </Menu>
+      </Listbox.Options>
+    </Listbox>
   );
 };
 
