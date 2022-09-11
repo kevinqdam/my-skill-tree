@@ -2,7 +2,6 @@ import { Dispatch, Fragment, SetStateAction, useRef } from "react";
 import { HexagonKey, HEXAGON_COLORS, Skill } from "./Tree";
 import { Dialog, Transition } from "@headlessui/react";
 import ColorListbox from "@/components/ColorListbox";
-import ColoredCircle from "@/components/ColoredCircle";
 
 type ModalProps = {
   showModal: boolean;
@@ -53,7 +52,7 @@ const Modal = ({ showModal, setShowModal, hexagonKey }: ModalProps) => {
                         className="flex justify-between text-lg font-medium leading-6 text-gray-900"
                       >
                         Modal title
-                        <ColorListbox color={HEXAGON_COLORS.Slate} />
+                        <ColorListbox currentColor={HEXAGON_COLORS.Slate} />
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
