@@ -14,7 +14,7 @@ const ColorListbox = ({ color }: ColorListboxProps) => {
   return (
     <Listbox as="div" value={selectedColor} onChange={setSelectedColor}>
       <Listbox.Button>
-        <div className="border border-gray-300 rounded-lg flex justify-evenly px-2 py-2 align-text-top gap-2">
+        <div className="rounded-lg flex justify-evenly px-2 py-2 align-text-top gap-2">
           <ColoredCircle color={selectedColor} />
           <ChevronDownIcon className="w-4 h-4 text-slate-500 self-center" />
         </div>
