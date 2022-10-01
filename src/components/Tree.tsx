@@ -97,7 +97,6 @@ const Tree = ({ skills }: TreeProps) => {
               s={s}
               className="fill-slate-300 stroke-slate-500 stroke-[0.2] transition-all duration-300 hover:fill-slate-500"
               onClick={() => {
-                console.log("clicked!!!!");
                 setSelectedHexagon(`(${q}, ${r}, ${s})`);
                 setShowModal(true);
               }}
