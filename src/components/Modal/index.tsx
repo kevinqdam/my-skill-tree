@@ -1,11 +1,11 @@
 import { Dispatch, Fragment, SetStateAction, useRef } from "react";
-import { Skill } from "./Tree";
+import { Skill } from "../Tree";
 import { Dialog, Transition } from "@headlessui/react";
 import ColorListbox from "@/components/ColorListbox";
 import {
   HexagonColor,
   HEXAGON_COLORS,
-} from "./Tree/hexagon";
+} from "../Tree/hexagon";
 
 type ModalProps = {
   showModal: boolean;
