@@ -1,14 +1,8 @@
+import { absurd } from '@/utils/absurd';
 import { HexagonColor, HEXAGON_COLORS } from './Tree/hexagon';
 
 type ColoredCircleProps = {
   color?: HexagonColor;
-};
-
-/**
- * Utility class to check for nonexhaustive switch statements at compile time
- */
-const absurd = (): never => {
-  throw new Error("Nonexhaustive switch statemenet");
 };
 
 const ColoredCircle = ({ color = HEXAGON_COLORS.Slate }: ColoredCircleProps): JSX.Element => {

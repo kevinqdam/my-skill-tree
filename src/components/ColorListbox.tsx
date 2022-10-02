@@ -1,21 +1,24 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import ColoredCircle from "@/components/ColoredCircle";
-import { HexagonColor, HEXAGON_COLORS } from './Tree/hexagon';
+import { HexagonColor, HEXAGON_COLORS } from "./Tree/hexagon";
 
 type ColorListboxProps = {
-  initialColor: HexagonColor;
+  color: HexagonColor;
+  dispatchSetColor: ((hexagonColor: HexagonColor) => void);
 };
 
-const ColorListbox = ({ initialColor }: ColorListboxProps) => {
-  const [selectedColor, setSelectedColor] = useState<HexagonColor>(initialColor);
-
+const ColorListbox = ({ color, dispatchSetColor }: ColorListboxProps) => {
   return (
-    <Listbox as="div" value={selectedColor} onChange={setSelectedColor}>
+    <Listbox
+      as="div"
+      value={color}
+      onChange={dispatchSetColor}
+    >
       <Listbox.Button>
         <div className="rounded-lg flex justify-evenly px-2 py-2 align-text-top gap-2">
-          <ColoredCircle color={selectedColor} />
+          <ColoredCircle color={color} />
           <ChevronDownIcon className="w-4 h-4 text-slate-500 self-center" />
         </div>
       </Listbox.Button>

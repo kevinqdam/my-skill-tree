@@ -1,11 +1,9 @@
-import { Dispatch, Fragment, SetStateAction, useRef } from "react";
+import { Dispatch, Fragment, SetStateAction, useEffect, useReducer, useRef } from "react";
 import { Skill } from "../Tree";
 import { Dialog, Transition } from "@headlessui/react";
 import ColorListbox from "@/components/ColorListbox";
-import {
-  HexagonColor,
-  HEXAGON_COLORS,
-} from "../Tree/hexagon";
+import { HexagonColor, HEXAGON_COLORS } from "../Tree/hexagon";
+import { absurd } from "@/utils/absurd";
 
 type ModalProps = {
   showModal: boolean;
@@ -18,8 +16,63 @@ type SkillFormState = {
   color: HexagonColor;
 };
 
+export type SetTextAction = {
+  type: "setText";
+  payload: string;
+};
+
+export type SetColorAction = {
+  type: "setColor";
+  payload: HexagonColor;
+};
+
+type SkillFormAction = SetTextAction | SetColorAction;
+
+const skillFormReducer = (
+  state: SkillFormState,
+  action: SkillFormAction
+): SkillFormState => {
+  const { type, payload } = action;
+  switch (type) {
+    case "setText":
+      return {
+        ...state,
+        text: payload,
+      };
+    case "setColor":
+      return {
+        ...state,
+        color: payload,
+      };
+  }
+  return absurd();
+};
+
+const NEW_SKILL_FORM_STATE: SkillFormState = {
+  text: "",
+  color: HEXAGON_COLORS.Slate,
+};
+
+const clearUnsavedChanges = (dispatch: Dispatch<SkillFormAction>, skill?: Skill) => {
+  const originalState: SkillFormState = skill
+    ? { text: skill.text, color: skill.color }
+    : NEW_SKILL_FORM_STATE;
+  dispatch({ type: 'setColor', payload: originalState.color });
+  dispatch({ type: 'setText', payload: originalState.text });
+};
+
 const Modal = ({ showModal, setShowModal, skill }: ModalProps) => {
   const cancelButtonRef = useRef(null);
+  const [state, dispatch] = useReducer(
+    skillFormReducer,
+    skill ? { text: skill.text, color: skill.color } : NEW_SKILL_FORM_STATE
+  );
+
+  useEffect(() => {
+    clearUnsavedChanges(dispatch, skill);
+
+    return () => clearUnsavedChanges(dispatch, skill);
+  }, [skill]);
 
   return (
     <Transition.Root show={showModal} as={Fragment}>
@@ -61,12 +114,18 @@ const Modal = ({ showModal, setShowModal, skill }: ModalProps) => {
                         className="flex justify-between text-lg font-medium leading-6 text-gray-900"
                       >
                         Create a new skill
-                        <ColorListbox initialColor={skill?.color ?? HEXAGON_COLORS.Slate} />
+                        <ColorListbox
+                          color={state.color}
+                          dispatchSetColor={(hexagonColor: HexagonColor) =>
+                            dispatch({
+                              type: "setColor",
+                              payload: hexagonColor,
+                            })
+                          }
+                        />
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500">
-                          Hello!
-                        </p>
+                        <p className="text-sm text-gray-500">Hello!</p>
                       </div>
                     </div>
                   </div>
