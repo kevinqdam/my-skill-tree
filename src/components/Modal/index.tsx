@@ -1,15 +1,9 @@
-import { Dispatch, Fragment, SetStateAction, useEffect, useReducer, useRef } from "react";
+import { Dispatch, Fragment, useEffect, useReducer, useRef } from "react";
 import { Skill } from "../Tree";
 import { Dialog, Transition } from "@headlessui/react";
 import ColorListbox from "@/components/ColorListbox";
 import { HexagonColor, HEXAGON_COLORS } from "../Tree/hexagon";
 import { absurd } from "@/utils/absurd";
-
-type ModalProps = {
-  showModal: boolean;
-  setShowModal: Dispatch<SetStateAction<boolean>>;
-  skill?: Skill;
-};
 
 type SkillFormState = {
   text: string;
@@ -53,15 +47,24 @@ const NEW_SKILL_FORM_STATE: SkillFormState = {
   color: HEXAGON_COLORS.Slate,
 };
 
-const clearUnsavedChanges = (dispatch: Dispatch<SkillFormAction>, skill?: Skill) => {
+const clearUnsavedChanges = (
+  dispatch: Dispatch<SkillFormAction>,
+  skill?: Skill
+) => {
   const originalState: SkillFormState = skill
     ? { text: skill.text, color: skill.color }
     : NEW_SKILL_FORM_STATE;
-  dispatch({ type: 'setColor', payload: originalState.color });
-  dispatch({ type: 'setText', payload: originalState.text });
+  dispatch({ type: "setColor", payload: originalState.color });
+  dispatch({ type: "setText", payload: originalState.text });
 };
 
-const Modal = ({ showModal, setShowModal, skill }: ModalProps) => {
+type ModalProps = {
+  isVisible: boolean;
+  hide: () => void;
+  skill?: Skill;
+};
+
+const Modal = ({ isVisible, hide, skill }: ModalProps) => {
   const cancelButtonRef = useRef(null);
   const [state, dispatch] = useReducer(
     skillFormReducer,
@@ -75,12 +78,12 @@ const Modal = ({ showModal, setShowModal, skill }: ModalProps) => {
   }, [skill]);
 
   return (
-    <Transition.Root show={showModal} as={Fragment}>
+    <Transition.Root show={isVisible} as={Fragment}>
       <Dialog
         as="div"
         className="relative"
         initialFocus={cancelButtonRef}
-        onClose={setShowModal}
+        onClose={hide}
       >
         <Transition.Child
           as={Fragment}
@@ -134,14 +137,14 @@ const Modal = ({ showModal, setShowModal, skill }: ModalProps) => {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setShowModal(false)}
+                    onClick={hide}
                   >
                     Save
                   </button>
                   <button
                     type="button"
                     className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setShowModal(false)}
+                    onClick={hide}
                     ref={cancelButtonRef}
                   >
                     Cancel

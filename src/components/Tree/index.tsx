@@ -20,10 +20,8 @@ export type Skill = {
 };
 
 const Tree = () => {
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [selectedSkill, setSelectedSkill] = useState<
-    Skill | undefined
-  >();
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [selectedSkill, setSelectedSkill] = useState<Skill | undefined>();
 
   /**
    * Make the hexgrid SVG pannable and zoomable
@@ -69,15 +67,19 @@ const Tree = () => {
                 s={s}
                 className={getHexagonClassName(skillOrUndefined)}
                 onClick={() => {
-                  setSelectedSkill(skillOrUndefined)
-                  setShowModal(true);
+                  setSelectedSkill(skillOrUndefined);
+                  setIsModalVisible(true);
                 }}
               />
             );
           })}
         </Layout>
       </HexGrid>
-      <Modal showModal={showModal} setShowModal={setShowModal} skill={selectedSkill} />
+      <Modal
+        isVisible={isModalVisible}
+        hide={() => setIsModalVisible(false)}
+        skill={selectedSkill}
+      />
     </div>
   );
 };
