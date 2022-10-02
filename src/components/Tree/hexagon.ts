@@ -203,7 +203,7 @@ export const getHexagonClassName = (
   skill?: Skill
 ) => {
   const classes = ["stroke-[0.2]", "transition-all", "duration-300"];
-  const color = skill?.fill ?? HEXAGON_COLORS.Slate;
+  const color = skill?.color ?? HEXAGON_COLORS.Slate;
   classes.push(color.fillDefault);
   classes.push(color.hoverFillSelected);
   classes.push(color.strokeSelected);

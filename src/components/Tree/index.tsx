@@ -16,7 +16,7 @@ const HEX_RADIUS = 3;
 export type Skill = {
   coordinates: HexagonCoordinates;
   text: string;
-  fill: HexagonColor;
+  color: HexagonColor;
 };
 
 const Tree = () => {
@@ -42,12 +42,12 @@ const Tree = () => {
 
   // TODO: get the map of skills from data-fetching or props
   const SKILLS: Skill[] = [
-    { coordinates: [1, -1, 0], text: "", fill: HEXAGON_COLORS.Red },
-    { coordinates: [1, 0, -1], text: "", fill: HEXAGON_COLORS.Orange },
-    { coordinates: [-1, 1, 0], text: "", fill: HEXAGON_COLORS.Yellow },
-    { coordinates: [0, 1, -1], text: "", fill: HEXAGON_COLORS.Green },
-    { coordinates: [-1, 0, 1], text: "", fill: HEXAGON_COLORS.Blue },
-    { coordinates: [0, -1, 1], text: "", fill: HEXAGON_COLORS.Violet },
+    { coordinates: [1, -1, 0], text: "", color: HEXAGON_COLORS.Red },
+    { coordinates: [1, 0, -1], text: "", color: HEXAGON_COLORS.Orange },
+    { coordinates: [-1, 1, 0], text: "", color: HEXAGON_COLORS.Yellow },
+    { coordinates: [0, 1, -1], text: "", color: HEXAGON_COLORS.Green },
+    { coordinates: [-1, 0, 1], text: "", color: HEXAGON_COLORS.Blue },
+    { coordinates: [0, -1, 1], text: "", color: HEXAGON_COLORS.Violet },
   ];
 
   return (

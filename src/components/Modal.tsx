@@ -3,6 +3,7 @@ import { Skill } from "./Tree";
 import { Dialog, Transition } from "@headlessui/react";
 import ColorListbox from "@/components/ColorListbox";
 import {
+  HexagonColor,
   HEXAGON_COLORS,
 } from "./Tree/hexagon";
 
@@ -10,6 +11,11 @@ type ModalProps = {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
   skill?: Skill;
+};
+
+type SkillFormState = {
+  text: string;
+  color: HexagonColor;
 };
 
 const Modal = ({ showModal, setShowModal, skill }: ModalProps) => {
@@ -55,7 +61,7 @@ const Modal = ({ showModal, setShowModal, skill }: ModalProps) => {
                         className="flex justify-between text-lg font-medium leading-6 text-gray-900"
                       >
                         Create a new skill
-                        <ColorListbox initialColor={skill?.fill ?? HEXAGON_COLORS.Slate} />
+                        <ColorListbox initialColor={skill?.color ?? HEXAGON_COLORS.Slate} />
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
