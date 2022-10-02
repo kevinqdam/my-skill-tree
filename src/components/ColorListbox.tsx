@@ -5,11 +5,11 @@ import ColoredCircle from "@/components/ColoredCircle";
 import { HexagonColor, HEXAGON_COLORS } from './Tree/hexagon';
 
 type ColorListboxProps = {
-  currentColor: HexagonColor;
+  initialColor: HexagonColor;
 };
 
-const ColorListbox = ({ currentColor }: ColorListboxProps) => {
-  const [selectedColor, setSelectedColor] = useState<HexagonColor>(currentColor);
+const ColorListbox = ({ initialColor }: ColorListboxProps) => {
+  const [selectedColor, setSelectedColor] = useState<HexagonColor>(initialColor);
 
   return (
     <Listbox as="div" value={selectedColor} onChange={setSelectedColor}>

@@ -2,22 +2,27 @@ import createPanZoom from "panzoom";
 import { useEffect, useState } from "react";
 import { GridGenerator, Hexagon, HexGrid, Layout } from "react-hexgrid";
 import Modal from "../Modal";
-import { getHexagonClassName, HexagonColor, HexagonKey, HEXAGON_COLORS } from './hexagon';
+import {
+  getHexagonClassName,
+  HexagonColor,
+  HexagonCoordinates,
+  HEXAGON_COLORS,
+} from "./hexagon";
 
 const HEX_GRID_ID = "hexgrid";
 const HEX_GRID_RADIUS = 6; // TODO: take this as a prop
 const HEX_RADIUS = 3;
 
 export type Skill = {
-  key: HexagonKey;
+  coordinates: HexagonCoordinates;
   text: string;
-  fill?: HexagonColor;
+  fill: HexagonColor;
 };
 
 const Tree = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [selectedHexagon, setSelectedHexagon] = useState<
-    HexagonKey | undefined
+  const [selectedSkill, setSelectedSkill] = useState<
+    Skill | undefined
   >();
 
   /**
@@ -36,48 +41,35 @@ const Tree = () => {
   const hexCoords = GridGenerator.hexagon(HEX_GRID_RADIUS);
 
   // TODO: get the map of skills from data-fetching or props
-  const SKILLS = new Map<HexagonKey, Skill>([
-    [
-      "(1, -1, 0)" as HexagonKey,
-      { key: "(0, 0, 0)", text: "", fill: HEXAGON_COLORS.Red },
-    ],
-    [
-      "(1, 0, -1)" as HexagonKey,
-      { key: "(0, 1, -1)", text: "", fill: HEXAGON_COLORS.Orange },
-    ],
-    [
-      "(-1, 1, 0)" as HexagonKey,
-      { key: "(0, 2, -2)", text: "", fill: HEXAGON_COLORS.Yellow },
-    ],
-    [
-      "(0, 1, -1)" as HexagonKey,
-      { key: "(0, 3, -3)", text: "", fill: HEXAGON_COLORS.Green },
-    ],
-    [
-      "(-1, 0, 1)" as HexagonKey,
-      { key: "(0, 3, -3)", text: "", fill: HEXAGON_COLORS.Blue },
-    ],
-    [
-      "(0, -1, 1)" as HexagonKey,
-      { key: "(0, 3, -3)", text: "", fill: HEXAGON_COLORS.Violet },
-    ],
-  ]);
+  const SKILLS: Skill[] = [
+    { coordinates: [1, -1, 0], text: "", fill: HEXAGON_COLORS.Red },
+    { coordinates: [1, 0, -1], text: "", fill: HEXAGON_COLORS.Orange },
+    { coordinates: [-1, 1, 0], text: "", fill: HEXAGON_COLORS.Yellow },
+    { coordinates: [0, 1, -1], text: "", fill: HEXAGON_COLORS.Green },
+    { coordinates: [-1, 0, 1], text: "", fill: HEXAGON_COLORS.Blue },
+    { coordinates: [0, -1, 1], text: "", fill: HEXAGON_COLORS.Violet },
+  ];
 
   return (
     <div className="w-full h-full flex items-center justify-center">
       <HexGrid className="block w-full h-full" id={HEX_GRID_ID}>
         <Layout size={{ x: HEX_RADIUS, y: HEX_RADIUS }} spacing={1.1}>
           {hexCoords.map(({ q, r, s }) => {
-            const hexagonKey = `(${q}, ${r}, ${s})` as HexagonKey;
+            const skillOrUndefined = SKILLS.find(
+              ({ coordinates }) =>
+                coordinates[0] === q &&
+                coordinates[1] === r &&
+                coordinates[2] === s
+            );
             return (
               <Hexagon
-                key={hexagonKey}
+                key={`${q},${r},${s}`}
                 q={q}
                 r={r}
                 s={s}
-                className={getHexagonClassName(SKILLS, hexagonKey)}
+                className={getHexagonClassName(skillOrUndefined)}
                 onClick={() => {
-                  setSelectedHexagon(`(${q}, ${r}, ${s})`);
+                  setSelectedSkill(skillOrUndefined)
                   setShowModal(true);
                 }}
               />
@@ -85,11 +77,7 @@ const Tree = () => {
           })}
         </Layout>
       </HexGrid>
-      <Modal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        hexagonKey={selectedHexagon}
-      />
+      <Modal showModal={showModal} setShowModal={setShowModal} skill={selectedSkill} />
     </div>
   );
 };

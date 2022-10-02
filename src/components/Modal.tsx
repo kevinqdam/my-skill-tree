@@ -2,15 +2,17 @@ import { Dispatch, Fragment, SetStateAction, useRef } from "react";
 import { Skill } from "./Tree";
 import { Dialog, Transition } from "@headlessui/react";
 import ColorListbox from "@/components/ColorListbox";
-import { HexagonKey, HEXAGON_COLORS } from './Tree/hexagon';
+import {
+  HEXAGON_COLORS,
+} from "./Tree/hexagon";
 
 type ModalProps = {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
-  hexagonKey?: HexagonKey;
+  skill?: Skill;
 };
 
-const Modal = ({ showModal, setShowModal, hexagonKey }: ModalProps) => {
+const Modal = ({ showModal, setShowModal, skill }: ModalProps) => {
   const cancelButtonRef = useRef(null);
 
   return (
@@ -52,12 +54,12 @@ const Modal = ({ showModal, setShowModal, hexagonKey }: ModalProps) => {
                         as="div"
                         className="flex justify-between text-lg font-medium leading-6 text-gray-900"
                       >
-                        Modal title
-                        <ColorListbox currentColor={HEXAGON_COLORS.Slate} />
+                        Create a new skill
+                        <ColorListbox initialColor={skill?.fill ?? HEXAGON_COLORS.Slate} />
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          {`You clicked the hexagon with key: ${hexagonKey}!`}
+                          Hello!
                         </p>
                       </div>
                     </div>
@@ -66,10 +68,10 @@ const Modal = ({ showModal, setShowModal, hexagonKey }: ModalProps) => {
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={() => setShowModal(false)}
                   >
-                    Deactivate
+                    Save
                   </button>
                   <button
                     type="button"

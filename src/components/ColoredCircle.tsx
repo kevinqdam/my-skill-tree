@@ -1,4 +1,4 @@
-import { HexagonColor, HEXAGON_COLORS } from "./Tree";
+import { HexagonColor, HEXAGON_COLORS } from './Tree/hexagon';
 
 type ColoredCircleProps = {
   color?: HexagonColor;

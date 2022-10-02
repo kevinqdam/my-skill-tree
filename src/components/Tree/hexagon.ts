@@ -1,7 +1,9 @@
+import { Skill } from '.';
+
 type QCoordinate = number;
 type RCoordinate = number;
 type SCoordinate = number;
-export type HexagonKey = `(${QCoordinate}, ${RCoordinate}, ${SCoordinate})`;
+export type HexagonCoordinates = readonly [ QCoordinate, RCoordinate, SCoordinate ];
 
 export type HexagonColor =
   | {
@@ -198,11 +200,10 @@ export const HEXAGON_COLORS: Record<HexagonColorKey, HexagonColor> = {
 };
 
 export const getHexagonClassName = (
-  skills: Map<HexagonKey, Skill>,
-  hexagonKey: HexagonKey
+  skill?: Skill
 ) => {
   const classes = ["stroke-[0.2]", "transition-all", "duration-300"];
-  const color = skills.get(hexagonKey)?.fill ?? HEXAGON_COLORS.Slate;
+  const color = skill?.fill ?? HEXAGON_COLORS.Slate;
   classes.push(color.fillDefault);
   classes.push(color.hoverFillSelected);
   classes.push(color.strokeSelected);
