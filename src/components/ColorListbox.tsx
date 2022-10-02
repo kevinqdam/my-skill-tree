@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import ColoredCircle from "@/components/ColoredCircle";
-import { HexagonColor, HEXAGON_COLORS } from "@/components/Tree";
+import { HexagonColor, HEXAGON_COLORS } from './Tree/hexagon';
 
 type ColorListboxProps = {
   currentColor: HexagonColor;
