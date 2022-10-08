@@ -58,13 +58,24 @@ const clearUnsavedChanges = (
   dispatch({ type: "setText", payload: originalState.text });
 };
 
+const handleSave = (
+  newSkill: Skill,
+  save: (newSkill: Skill) => void,
+  hide: () => void
+) => {
+  save(newSkill);
+  hide();
+};
+
 type ModalProps = {
   isVisible: boolean;
+  save: (newSkill: Skill) => void;
   hide: () => void;
+  coordinates: Skill["coordinates"];
   skill?: Skill;
 };
 
-const Modal = ({ isVisible, hide, skill }: ModalProps) => {
+const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
   const cancelButtonRef = useRef(null);
   const [state, dispatch] = useReducer(
     skillFormReducer,
@@ -74,7 +85,11 @@ const Modal = ({ isVisible, hide, skill }: ModalProps) => {
   /**
    * Initialize the modal skill form when a new skill is selected
    */
-  useEffect(() => clearUnsavedChanges(dispatch, skill), [skill]);
+  useEffect(() => {
+    clearUnsavedChanges(dispatch, skill), [skill];
+
+    return () => clearUnsavedChanges(dispatch, skill);
+  }, [skill]);
 
   return (
     <Transition.Root show={isVisible} as={Fragment}>
@@ -136,7 +151,17 @@ const Modal = ({ isVisible, hide, skill }: ModalProps) => {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={hide}
+                    onClick={() =>
+                      handleSave(
+                        {
+                          coordinates,
+                          text: state.text,
+                          color: state.color,
+                        },
+                        save,
+                        hide
+                      )
+                    }
                   >
                     Save
                   </button>
