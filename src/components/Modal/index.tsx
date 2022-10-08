@@ -117,7 +117,7 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
     return () => clearUnsavedChanges(dispatch, skill);
   }, [skill, coordinates]);
 
-  const isReadyToSave = state.color !== HEXAGON_COLORS.Slate && state.text;
+  const isReadyToSave: boolean = state.color !== HEXAGON_COLORS.Slate && Boolean(state.text);
 
   return (
     <Transition.Root show={isVisible} as={Fragment}>

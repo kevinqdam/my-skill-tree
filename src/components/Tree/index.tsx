@@ -22,12 +22,12 @@ export type Skill = {
 
   // TODO: get the map of skills from data-fetching or props
   const INITIAL_SKILLS: Skill[] = [
-    { coordinates: [1, -1, 0], text: "", color: HEXAGON_COLORS.Red },
-    { coordinates: [1, 0, -1], text: "", color: HEXAGON_COLORS.Orange },
-    { coordinates: [-1, 1, 0], text: "", color: HEXAGON_COLORS.Yellow },
-    { coordinates: [0, 1, -1], text: "", color: HEXAGON_COLORS.Green },
-    { coordinates: [-1, 0, 1], text: "", color: HEXAGON_COLORS.Blue },
-    { coordinates: [0, -1, 1], text: "", color: HEXAGON_COLORS.Violet },
+    // { coordinates: [1, -1, 0], text: "", color: HEXAGON_COLORS.Red },
+    // { coordinates: [1, 0, -1], text: "", color: HEXAGON_COLORS.Orange },
+    // { coordinates: [-1, 1, 0], text: "", color: HEXAGON_COLORS.Yellow },
+    // { coordinates: [0, 1, -1], text: "", color: HEXAGON_COLORS.Green },
+    // { coordinates: [-1, 0, 1], text: "", color: HEXAGON_COLORS.Blue },
+    // { coordinates: [0, -1, 1], text: "", color: HEXAGON_COLORS.Violet },
   ];
 
 const Tree = () => {
