@@ -74,7 +74,7 @@ const ColoredCircle = ({ color = HEXAGON_COLORS.Slate }: ColoredCircleProps): JS
         </div>
       );
     default:
-      absurd();
+      return absurd(color);
   }
 
   return (

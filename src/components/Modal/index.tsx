@@ -8,19 +8,25 @@ import { absurd } from "@/utils/absurd";
 type SkillFormState = {
   text: string;
   color: HexagonColor;
+  isComplete: boolean;
 };
 
-export type SetTextAction = {
+type SetTextAction = {
   type: "setText";
   payload: string;
 };
 
-export type SetColorAction = {
+type SetColorAction = {
   type: "setColor";
   payload: HexagonColor;
 };
 
-type SkillFormAction = SetTextAction | SetColorAction;
+type SetIsCompleteAction = {
+  type: "setIsComplete";
+  payload: boolean;
+};
+
+type SkillFormAction = SetTextAction | SetColorAction | SetIsCompleteAction;
 
 const saveButtonClassNames = (isReadyToSave: boolean) => {
   const baseClassNames = [
@@ -70,11 +76,11 @@ const levelUpButtonClassNames = (skill: Skill) => {
     "sm:ml-3",
     "sm:w-auto",
     "sm:text-sm",
-    skill.color.bgSelected
+    skill.color.bgSelected,
   ];
 
   return classNames.join(" ");
-}
+};
 
 const skillFormReducer = (
   state: SkillFormState,
@@ -92,13 +98,19 @@ const skillFormReducer = (
         ...state,
         color: payload,
       };
+    case "setIsComplete":
+      return {
+        ...state,
+        isComplete: payload,
+      };
   }
-  return absurd();
+  return absurd(type);
 };
 
 const NEW_SKILL_FORM_STATE: SkillFormState = {
   text: "",
   color: HEXAGON_COLORS.Slate,
+  isComplete: false,
 };
 
 const clearUnsavedChanges = (
@@ -106,7 +118,7 @@ const clearUnsavedChanges = (
   skill?: Skill
 ) => {
   const originalState: SkillFormState = skill
-    ? { text: skill.text, color: skill.color }
+    ? { text: skill.text, color: skill.color, isComplete: skill.isComplete }
     : NEW_SKILL_FORM_STATE;
   dispatch({ type: "setColor", payload: originalState.color });
   dispatch({ type: "setText", payload: originalState.text });
@@ -133,7 +145,9 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
   const cancelButtonRef = useRef(null);
   const [state, dispatch] = useReducer(
     skillFormReducer,
-    skill ? { text: skill.text, color: skill.color } : NEW_SKILL_FORM_STATE
+    skill
+      ? { text: skill.text, color: skill.color, isComplete: skill.isComplete }
+      : NEW_SKILL_FORM_STATE
   );
 
   /**
