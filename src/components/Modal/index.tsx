@@ -43,10 +43,38 @@ const saveButtonClassNames = (isReadyToSave: boolean) => {
     "sm:w-auto",
     "sm:text-sm",
   ];
-  const btnColorClassNames = isReadyToSave ? ["bg-blue-600", "hover:bg-blue-700"] : ["bg-gray-600"];
+  const btnColorClassNames = isReadyToSave
+    ? ["bg-blue-600", "hover:bg-blue-700"]
+    : ["bg-gray-600"];
 
   return [...baseClassNames, ...btnColorClassNames].join(" ");
 };
+
+const levelUpButtonClassNames = (skill: Skill) => {
+  const classNames = [
+    "inline-flex",
+    "w-full",
+    "justify-center",
+    "rounded-md",
+    "border",
+    "border-transparent",
+    "px-4",
+    "py-2",
+    "text-base",
+    "font-medium",
+    "text-white",
+    "shadow-sm",
+    "focus:outline-none",
+    "focus:ring-2",
+    "focus:ring-offset-2",
+    "sm:ml-3",
+    "sm:w-auto",
+    "sm:text-sm",
+    skill.color.bgSelected
+  ];
+
+  return classNames.join(" ");
+}
 
 const skillFormReducer = (
   state: SkillFormState,
@@ -117,7 +145,8 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
     return () => clearUnsavedChanges(dispatch, skill);
   }, [skill, coordinates]);
 
-  const isReadyToSave: boolean = state.color !== HEXAGON_COLORS.Slate && Boolean(state.text);
+  const isReadyToSave: boolean =
+    state.color !== HEXAGON_COLORS.Slate && Boolean(state.text);
 
   return (
     <Transition.Root show={isVisible} as={Fragment}>
@@ -190,6 +219,14 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  {skill && (
+                    <button
+                      type="button"
+                      className={levelUpButtonClassNames(skill)}
+                    >
+                      Level up
+                    </button>
+                  )}
                   <button
                     type="button"
                     disabled={!isReadyToSave}
@@ -200,6 +237,7 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
                           coordinates,
                           text: state.text,
                           color: state.color,
+                          isComplete: false,
                         },
                         save,
                         hide

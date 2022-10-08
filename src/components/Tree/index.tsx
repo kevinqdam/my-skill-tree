@@ -18,6 +18,7 @@ export type Skill = {
   coordinates: HexagonCoordinates;
   text: string;
   color: HexagonColor;
+  isComplete: boolean;
 };
 
   // TODO: get the map of skills from data-fetching or props
