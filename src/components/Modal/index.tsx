@@ -71,11 +71,10 @@ const Modal = ({ isVisible, hide, skill }: ModalProps) => {
     skill ? { text: skill.text, color: skill.color } : NEW_SKILL_FORM_STATE
   );
 
-  useEffect(() => {
-    clearUnsavedChanges(dispatch, skill);
-
-    return () => clearUnsavedChanges(dispatch, skill);
-  }, [skill]);
+  /**
+   * Initialize the modal skill form when a new skill is selected
+   */
+  useEffect(() => clearUnsavedChanges(dispatch, skill), [skill]);
 
   return (
     <Transition.Root show={isVisible} as={Fragment}>
