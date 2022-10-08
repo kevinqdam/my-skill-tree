@@ -8,7 +8,6 @@ import { absurd } from "@/utils/absurd";
 type SkillFormState = {
   text: string;
   color: HexagonColor;
-  isComplete: boolean;
 };
 
 type SetTextAction = {
@@ -21,12 +20,7 @@ type SetColorAction = {
   payload: HexagonColor;
 };
 
-type SetIsCompleteAction = {
-  type: "setIsComplete";
-  payload: boolean;
-};
-
-type SkillFormAction = SetTextAction | SetColorAction | SetIsCompleteAction;
+type SkillFormAction = SetTextAction | SetColorAction;
 
 const saveButtonClassNames = (isReadyToSave: boolean) => {
   const baseClassNames = [
@@ -57,7 +51,7 @@ const saveButtonClassNames = (isReadyToSave: boolean) => {
 };
 
 const levelUpButtonClassNames = (skill: Skill) => {
-  const classNames = [
+  const baseClassNames = [
     "inline-flex",
     "w-full",
     "justify-center",
@@ -76,10 +70,12 @@ const levelUpButtonClassNames = (skill: Skill) => {
     "sm:ml-3",
     "sm:w-auto",
     "sm:text-sm",
-    skill.color.bgSelected,
   ];
+  const colorClassNames = skill.isComplete
+    ? [skill.color.bgDefault, skill.color.hoverBgSelected]
+    : [skill.color.bgSelected, skill.color.hoverBgLevelUp];
 
-  return classNames.join(" ");
+  return [...baseClassNames, ...colorClassNames].join(" ");
 };
 
 const skillFormReducer = (
@@ -98,11 +94,6 @@ const skillFormReducer = (
         ...state,
         color: payload,
       };
-    case "setIsComplete":
-      return {
-        ...state,
-        isComplete: payload,
-      };
   }
   return absurd(type);
 };
@@ -110,7 +101,6 @@ const skillFormReducer = (
 const NEW_SKILL_FORM_STATE: SkillFormState = {
   text: "",
   color: HEXAGON_COLORS.Slate,
-  isComplete: false,
 };
 
 const clearUnsavedChanges = (
@@ -118,7 +108,7 @@ const clearUnsavedChanges = (
   skill?: Skill
 ) => {
   const originalState: SkillFormState = skill
-    ? { text: skill.text, color: skill.color, isComplete: skill.isComplete }
+    ? { text: skill.text, color: skill.color }
     : NEW_SKILL_FORM_STATE;
   dispatch({ type: "setColor", payload: originalState.color });
   dispatch({ type: "setText", payload: originalState.text });
@@ -145,9 +135,7 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
   const cancelButtonRef = useRef(null);
   const [state, dispatch] = useReducer(
     skillFormReducer,
-    skill
-      ? { text: skill.text, color: skill.color, isComplete: skill.isComplete }
-      : NEW_SKILL_FORM_STATE
+    skill ? { text: skill.text, color: skill.color } : NEW_SKILL_FORM_STATE
   );
 
   /**
@@ -237,8 +225,20 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
                     <button
                       type="button"
                       className={levelUpButtonClassNames(skill)}
+                      onClick={() =>
+                        handleSave(
+                          {
+                            coordinates,
+                            text: state.text,
+                            color: state.color,
+                            isComplete: !skill.isComplete,
+                          },
+                          save,
+                          hide
+                        )
+                      }
                     >
-                      Level up
+                      {skill.isComplete ? "Redo" : "Level up"}
                     </button>
                   )}
                   <button
