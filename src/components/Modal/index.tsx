@@ -22,6 +22,32 @@ export type SetColorAction = {
 
 type SkillFormAction = SetTextAction | SetColorAction;
 
+const saveButtonClassNames = (isReadyToSave: boolean) => {
+  const baseClassNames = [
+    "inline-flex",
+    "w-full",
+    "justify-center",
+    "rounded-md",
+    "border",
+    "border-transparent",
+    "px-4",
+    "py-2",
+    "text-base",
+    "font-medium",
+    "text-white",
+    "shadow-sm",
+    "focus:outline-none",
+    "focus:ring-2",
+    "focus:ring-offset-2",
+    "sm:ml-3",
+    "sm:w-auto",
+    "sm:text-sm",
+  ];
+  const btnColorClassNames = isReadyToSave ? ["bg-blue-600", "hover:bg-blue-700"] : ["bg-gray-600"];
+
+  return [...baseClassNames, ...btnColorClassNames].join(" ");
+};
+
 const skillFormReducer = (
   state: SkillFormState,
   action: SkillFormAction
@@ -91,6 +117,8 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
     return () => clearUnsavedChanges(dispatch, skill);
   }, [skill, coordinates]);
 
+  const isReadyToSave = state.color !== HEXAGON_COLORS.Slate && state.text;
+
   return (
     <Transition.Root show={isVisible} as={Fragment}>
       <Dialog
@@ -142,7 +170,21 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
                         />
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p className="text-sm text-gray-500">Hello!</p>
+                        <label className="block text-md text-gray-600 font-semi-bold mb-2">
+                          What skill would you like to level up?
+                        </label>
+                        <textarea
+                          onChange={(event) =>
+                            dispatch({
+                              type: "setText",
+                              payload: event.target.value,
+                            })
+                          }
+                          rows={5}
+                          defaultValue={skill?.text}
+                          placeholder="Description"
+                          className="border px-2 py-2 rounded focus:outline-none focus:ring w-full"
+                        />
                       </div>
                     </div>
                   </div>
@@ -150,7 +192,8 @@ const Modal = ({ isVisible, save, hide, coordinates, skill }: ModalProps) => {
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                    disabled={!isReadyToSave}
+                    className={saveButtonClassNames(isReadyToSave)}
                     onClick={() =>
                       handleSave(
                         {
